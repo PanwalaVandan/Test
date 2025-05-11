@@ -1,0 +1,31 @@
+<!-- inside your <nz-modal> form -->
+<form nz-form [formGroup]="modalForm">
+  <nz-form-item *ngFor="let field of modalFields">
+    <nz-form-label [nzFor]="field.controlName" nzRequired>
+      {{ field.label }}
+    </nz-form-label>
+    <nz-form-control nzErrorTip="Please enter {{ field.label }}">
+      <!-- Dropdown -->
+      <nz-select
+        *ngIf="field.fieldType==='select'"
+        [formControlName]="field.controlName"
+        [nzPlaceHolder]="'Select ' + field.label"
+      >
+        <nz-option
+          *ngFor="let opt of dropdownOptions[field.controlName]"
+          [nzValue]="opt.value"
+          [nzLabel]="opt.label"
+        ></nz-option>
+      </nz-select>
+
+      <!-- Text/Input -->
+      <input
+        *ngIf="field.fieldType==='input'"
+        nz-input
+        [id]="field.controlName"
+        [type]="field.type || 'text'"
+        [formControlName]="field.controlName"
+      />
+    </nz-form-control>
+  </nz-form-item>
+</form>

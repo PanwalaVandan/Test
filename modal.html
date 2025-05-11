@@ -1,0 +1,143 @@
+<!-- Add/Edit Modal with Grid Layout -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="isEdit ? 'Edit Employee Profile' : 'Add Employee Profile'"
+  [nzWidth]="800"
+  [nzBodyStyle]="{ 'max-height': '80vh', 'overflow-y': 'auto' }"
+  (nzOnOk)="handleOk()"
+  (nzOnCancel)="handleCancel()"
+>
+  <form nz-form [formGroup]="modalForm">
+    <!-- Profile Section -->
+    <div class="form-section">
+      <h3>Profile</h3>
+      <div class="form-grid">
+        <ng-container *ngFor="let field of modalFields">
+          <ng-container *ngIf="profileFields.includes(field.controlName)">
+            <nz-form-item>
+              <nz-form-label
+                [nzFor]="field.controlName"
+                [nzRequired]="requiredFields.has(field.controlName)"
+              >
+                {{ field.label }}
+              </nz-form-label>
+              <nz-form-control
+                [nzErrorTip]="
+                  requiredFields.has(field.controlName)
+                    ? field.label + ' is required'
+                    : null
+                "
+              >
+                <nz-select
+                  *ngIf="field.fieldType === 'select'"
+                  [formControlName]="field.controlName"
+                  [nzPlaceHolder]="'Select ' + field.label"
+                >
+                  <nz-option
+                    *ngFor="let opt of dropdownOptions[field.controlName] || []"
+                    [nzValue]="opt.value"
+                    [nzLabel]="opt.label"
+                  ></nz-option>
+                </nz-select>
+                <input
+                  *ngIf="field.fieldType === 'input'"
+                  nz-input
+                  [type]="field.type || 'text'"
+                  [formControlName]="field.controlName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Job Details Section -->
+    <div class="form-section">
+      <h3>Job Details</h3>
+      <div class="form-grid">
+        <ng-container *ngFor="let field of modalFields">
+          <ng-container *ngIf="jobFields.includes(field.controlName)">
+            <nz-form-item>
+              <nz-form-label
+                [nzFor]="field.controlName"
+                [nzRequired]="requiredFields.has(field.controlName)"
+              >
+                {{ field.label }}
+              </nz-form-label>
+              <nz-form-control
+                [nzErrorTip]="
+                  requiredFields.has(field.controlName)
+                    ? field.label + ' is required'
+                    : null
+                "
+              >
+                <nz-select
+                  *ngIf="field.fieldType === 'select'"
+                  [formControlName]="field.controlName"
+                  [nzPlaceHolder]="'Select ' + field.label"
+                >
+                  <nz-option
+                    *ngFor="let opt of dropdownOptions[field.controlName] || []"
+                    [nzValue]="opt.value"
+                    [nzLabel]="opt.label"
+                  ></nz-option>
+                </nz-select>
+                <input
+                  *ngIf="field.fieldType === 'input'"
+                  nz-input
+                  [type]="field.type || 'text'"
+                  [formControlName]="field.controlName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Manager Info Section -->
+    <div class="form-section">
+      <h3>Manager Info</h3>
+      <div class="form-grid">
+        <ng-container *ngFor="let field of modalFields">
+          <ng-container *ngIf="managerFields.includes(field.controlName)">
+            <nz-form-item>
+              <nz-form-label
+                [nzFor]="field.controlName"
+                [nzRequired]="requiredFields.has(field.controlName)"
+              >
+                {{ field.label }}
+              </nz-form-label>
+              <nz-form-control
+                [nzErrorTip]="
+                  requiredFields.has(field.controlName)
+                    ? field.label + ' is required'
+                    : null
+                "
+              >
+                <nz-select
+                  *ngIf="field.fieldType === 'select'"
+                  [formControlName]="field.controlName"
+                  [nzPlaceHolder]="'Select ' + field.label"
+                >
+                  <nz-option
+                    *ngFor="let opt of dropdownOptions[field.controlName] || []"
+                    [nzValue]="opt.value"
+                    [nzLabel]="opt.label"
+                  ></nz-option>
+                </nz-select>
+                <input
+                  *ngIf="field.fieldType === 'input'"
+                  nz-input
+                  [type]="field.type || 'text'"
+                  [formControlName]="field.controlName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+</nz-modal>

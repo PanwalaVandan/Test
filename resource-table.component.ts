@@ -92,6 +92,46 @@ export class ResourceTableComponent implements OnInit {
     'secondaryManagerName',
     'secondaryManagerEmailAddress'
   ]);
+
+  // … existing members …
+
+  /** Field grouping for the new grid layout */
+  profileFields: string[] = [
+    'division',
+    'subDivisionPillarName',
+    'productFunctionArea',
+    'pillarHead',
+    'hrId',
+    'userId',
+    'resourceName',
+    'positionId'
+  ];
+
+  jobFields: string[] = [
+    'employeeType',
+    'lastHireDate',
+    'termDate',
+    'serviceBand',
+    'costCode',
+    'ppmProject',
+    'region',
+    'corporateTitle',
+    'jobCode',
+    'functionalTitle'
+  ];
+
+  managerFields: string[] = [
+    'employeeEmailAddress',
+    'supervisorId',
+    'supervisorName',
+    'supervisorEmailAddress',
+    'secondaryManagerId',
+    'secondaryManagerName',
+    'secondaryManagerEmailAddress',
+    'vendorTypeMod',
+    'provider',
+    'month'
+  ];
   
   constructor(
     private fb: FormBuilder,

@@ -67,6 +67,32 @@ export class ResourceTableComponent implements OnInit {
   { controlName: 'month',                      label: 'Month',                   fieldType: 'input'  }
   ];
 
+    /** Only these fields should be required */
+  requiredFields = new Set([
+    'division',
+    'subDivisionPillarName',
+    'productFunctionArea',
+    'pillarHead',
+    'hrId',
+    'userId',
+    'resourceName',
+    'positionId',
+    'employeeType',
+    'lastHireDate',
+    'costCode',
+    'region',
+    'corporateTitle',
+    'jobCode',
+    'functionalTitle',
+    'employeeEmailAddress',
+    'supervisorId',
+    'supervisorName',
+    'supervisorEmailAddress',
+    'secondaryManagerId',
+    'secondaryManagerName',
+    'secondaryManagerEmailAddress'
+  ]);
+  
   constructor(
     private fb: FormBuilder,
     private resourceService: ResourceService,
@@ -83,6 +109,16 @@ export class ResourceTableComponent implements OnInit {
       this.listOfData = data;
       this.filterData();
     });
+
+    // 3) Build the Add/Edit modal form with conditional required validators
+  const modalControls = this.modalFields.reduce((acc, f) => {
+    acc[f.controlName] = [
+      null,
+      this.requiredFields.has(f.controlName) ? Validators.required : []
+    ];
+    return acc;
+  }, {} as any);
+  this.modalForm = this.fb.group(modalControls);
 
     // 3) Build reactive forms
     const fieldControls = this.modalFields.reduce((acc, f) => ({

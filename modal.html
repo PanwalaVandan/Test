@@ -141,3 +141,31 @@
     </div>
   </form>
 </nz-modal>
+
+
+<!-- Floating Action Buttons -->
+<div class="floating-buttons">
+  <button
+    nz-button
+    nzShape="circle"
+    nzSize="large"
+    nzType="primary"
+    nz-tooltip
+    nzTooltipTitle="{{ showFilterPanel ? 'Hide Filters' : 'Show Filters' }}"
+    (click)="toggleFilters()"
+  >
+    <i nz-icon nzType="filter"></i>
+  </button>
+
+  <button
+    nz-button
+    nzShape="circle"
+    nzSize="large"
+    nzType="primary"
+    nz-tooltip
+    nzTooltipTitle="Add New Record"
+    (click)="showModal()"
+  >
+    <i nz-icon nzType="plus"></i>
+  </button>
+</div>

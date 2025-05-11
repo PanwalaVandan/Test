@@ -54,7 +54,17 @@ export class ResourceTableComponent implements OnInit {
     { controlName: 'corporateTitle',       label: 'Corporate Title',         fieldType: 'select' },
     { controlName: 'jobCode',              label: 'Job Code',                fieldType: 'input'  },
     { controlName: 'functionalTitle',      label: 'Functional Title',        fieldType: 'select' },
-    // … rest remain as inputs …
+    // … missing ones
+    { controlName: 'employeeEmailAddress',       label: 'Employee Email Address',  fieldType: 'input',   type: 'email' },
+  { controlName: 'supervisorId',               label: 'Supervisor Id',           fieldType: 'input',   type: 'number' },
+  { controlName: 'supervisorName',             label: 'Supervisor Name',         fieldType: 'input'  },
+  { controlName: 'supervisorEmailAddress',     label: 'Supervisor Email Address',fieldType: 'input',   type: 'email' },
+  { controlName: 'secondaryManagerId',         label: 'Secondary Manager ID',     fieldType: 'input'  },
+  { controlName: 'secondaryManagerName',       label: 'Secondary Manager Name',   fieldType: 'input'  },
+  { controlName: 'secondaryManagerEmailAddress',label: 'Secondary Manager Email Address',fieldType: 'input', type: 'email' },
+  { controlName: 'vendorTypeMod',              label: 'Vendor Type Mod',         fieldType: 'input'  },
+  { controlName: 'provider',                   label: 'Provider',                fieldType: 'input'  },
+  { controlName: 'month',                      label: 'Month',                   fieldType: 'input'  }
   ];
 
   constructor(

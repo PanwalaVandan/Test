@@ -1,41 +1,140 @@
-<!-- inside your <nz-modal> form -->
-<form nz-form [formGroup]="modalForm">
-  <nz-form-item *ngFor="let field of modalFields">
-  <!-- label only marked required when in our set -->
-  <nz-form-label
-    [nzFor]="field.controlName"
-    [nzRequired]="requiredFields.has(field.controlName)"
+<!-- ============================================================== -->
+<!-- 1) VIEW TOGGLE BUTTONS — paste at the very top of the template -->
+<!-- ============================================================== -->
+<div class="view-toggle">
+  <button
+    nz-button
+    [nzType]="viewMode==='table' ? 'primary':'default'"
+    (click)="setView('table')"
   >
-    {{ field.label }}
-  </nz-form-label>
-
-  <nz-form-control
-    <!-- only show error if it’s required and invalid -->
-    [nzErrorTip]="
-      requiredFields.has(field.controlName)
-        ? field.label + ' is required'
-        : null
-    "
+    <i nz-icon nzType="table"></i> Table
+  </button>
+  <button
+    nz-button
+    [nzType]="viewMode==='cards' ? 'primary':'default'"
+    (click)="setView('cards')"
   >
-    <!-- select vs input as before… -->
-    <nz-select
-      *ngIf="field.fieldType==='select'"
-      [formControlName]="field.controlName"
-      [nzPlaceHolder]="'Select ' + field.label"
-    >
-      <nz-option
-        *ngFor="let opt of dropdownOptions[field.controlName] || []"
-        [nzValue]="opt.value"
-        [nzLabel]="opt.label"
-      ></nz-option>
-    </nz-select>
+    <i nz-icon nzType="appstore"></i> Cards
+  </button>
+</div>
 
-    <input
-      *ngIf="field.fieldType==='input'"
-      nz-input
-      [type]="field.type || 'text'"
-      [formControlName]="field.controlName"
-    />
-  </nz-form-control>
-</nz-form-item>
-</form>
+<!-- ============================================================== -->
+<!-- 2) TABLE VIEW — wrap your existing Collapse + nz-table in this block -->
+<!-- ============================================================== -->
+<div *ngIf="viewMode==='table'">
+  <!-- === Start of your existing Advanced Filters + Table === -->
+
+  <!-- Collapsible Advanced Filters Panel -->
+  <nz-collapse [nzBordered]="false">
+    <nz-collapse-panel nzHeader="Advanced Filters" [nzActive]="showFilterPanel">
+      <form nz-form [formGroup]="filterForm" class="filter-panel">
+        <nz-row nzGutter="16">
+          <nz-col nzSpan="8" *ngFor="let col of modalFields">
+            <nz-form-item>
+              <nz-form-label [nzFor]="col.controlName">{{ col.label }}</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  [id]="col.controlName"
+                  formControlName="{{ col.controlName }}"
+                  placeholder="Filter by {{ col.label }}"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </nz-col>
+        </nz-row>
+        <div class="filter-actions">
+          <button nz-button nzType="primary" (click)="applyFilters()">Apply</button>
+          <button nz-button nzType="default" (click)="resetFilters()">Reset</button>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+
+  <!-- Data Table with Pagination -->
+  <nz-table
+    #filterTable
+    [nzData]="listOfDisplayData"
+    nzBordered
+    nzScroll="{ x: '2000px' }"
+    nzFrontPagination
+    [nzPageSize]="100"
+  >
+    <thead>
+      <tr>
+        <th *ngFor="let col of modalFields">{{ col.label }}</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of filterTable.data">
+        <td *ngFor="let col of modalFields">{{ data[col.controlName] }}</td>
+        <td>
+          <button nz-button nzType="link" (click)="showModal(true, data)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <!-- === End of your existing Advanced Filters + Table === -->
+</div>
+
+<!-- ============================================================== -->
+<!-- 3) CARD-GRID VIEW — paste new card markup in this block below -->
+<!-- ============================================================== -->
+<div *ngIf="viewMode==='cards'" class="grid">
+  <div class="card" *ngFor="let rec of listOfDisplayData">
+    <!-- Card Header with Edit button -->
+    <div class="card-header">
+      {{ rec.resourceName }} ({{ rec.userId }})
+      <button
+        nz-button nzType="link" nzSize="small"
+        (click)="showModal(true, rec)"
+      >Edit</button>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="card-section">
+      <h4>Profile</h4>
+      <div class="field" *ngFor="let key of profileFields">
+        <span>{{ getLabel(key) }}:</span> {{ rec[key] }}
+      </div>
+    </div>
+
+    <!-- Job Section -->
+    <div class="card-section">
+      <h4>Job</h4>
+      <div class="field" *ngFor="let key of jobFields">
+        <span>{{ getLabel(key) }}:</span> {{ rec[key] }}
+      </div>
+    </div>
+
+    <!-- Manager Section -->
+    <div class="card-section">
+      <h4>Manager</h4>
+      <div class="field" *ngFor="let key of managerFields">
+        <span>{{ getLabel(key) }}:</span> {{ rec[key] }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- 4) FLOATING ACTION BUTTONS — leave where they are (bottom of file) -->
+<!-- ============================================================== -->
+<div class="floating-buttons">
+  <button
+    nz-button nzShape="circle" nzSize="large" nzType="primary"
+    nz-tooltip nzTooltipTitle="{{ showFilterPanel ? 'Hide Filters' : 'Show Filters' }}"
+    (click)="toggleFilters()"
+  >
+    <i nz-icon nzType="filter"></i>
+  </button>
+  <button
+    nz-button nzShape="circle" nzSize="large" nzType="primary"
+    nz-tooltip nzTooltipTitle="Add New Record"
+    (click)="showModal()"
+  >
+    <i nz-icon nzType="plus"></i>
+  </button>
+</div>

@@ -1,0 +1,28 @@
+{
+  "division": [
+    { "label": "Finance", "value": "finance" },
+    { "label": "HR",      "value": "hr" },
+    { "label": "IT",      "value": "it" }
+  ],
+  "subDivisionPillarName": [
+    { "label": "Pillar A", "value": "pillarA" },
+    { "label": "Pillar B", "value": "pillarB" }
+  ],
+  "employeeType": [
+    { "label": "Full-time",   "value": "fulltime" },
+    { "label": "Contractor",  "value": "contractor" }
+  ],
+  "region": [
+    { "label": "APAC",  "value": "apac" },
+    { "label": "EMEA",  "value": "emea" },
+    { "label": "AMERICAS", "value": "americas" }
+  ],
+  "corporateTitle": [
+    { "label": "Manager",   "value": "manager" },
+    { "label": "Director",  "value": "director" }
+  ],
+  "functionalTitle": [
+    { "label": "Engineer",    "value": "engineer" },
+    { "label": "Analyst",     "value": "analyst" }
+  ]
+}

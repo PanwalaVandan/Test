@@ -120,19 +120,12 @@ export class ResourceTableComponent implements OnInit {
   }, {} as any);
   this.modalForm = this.fb.group(modalControls);
 
-    // 3) Build reactive forms
-    const fieldControls = this.modalFields.reduce((acc, f) => ({
-      ...acc,
-      [f.controlName]: [ null ]
-    }), {});
-    this.modalForm = this.fb.group(fieldControls);
-
-    const filterControls = this.modalFields.reduce((acc, f) => ({
-      ...acc,
-      [f.controlName]: [ '' ]
-    }), {});
-    this.filterForm = this.fb.group(filterControls);
-  }
+    // 4) Build the filters form (all optional)
+  const filterControls = this.modalFields.reduce((acc, f) => {
+    acc[f.controlName] = [''];
+    return acc;
+  }, {} as any);
+  this.filterForm = this.fb.group(filterControls);
 
   // … keep your toggleFilters, applyFilters, resetFilters, filterData, showModal, handleOk, handleCancel methods exactly as before …
 }

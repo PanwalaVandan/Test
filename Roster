@@ -13,6 +13,10 @@ def convert_stakeholder_format(input_file, output_file="converted_roster.json"):
     else:
         raise ValueError("Unsupported file format. Use .csv, .xls, or .xlsx")
 
+    # Ensure Date and Day are strings
+    df["Date"] = df["Date"].astype(str)
+    df["Day"] = df["Day"].astype(str)
+
     # Melt: Employee columns to rows
     melted = df.melt(id_vars=["Date", "Day"], var_name="Employee", value_name="Shift")
 
@@ -28,6 +32,8 @@ def convert_stakeholder_format(input_file, output_file="converted_roster.json"):
     pivoted = grouped.pivot(index=["Date", "Day"], columns="Shift", values="Employee").reset_index()
 
     # Convert to JSON and save
+    pivoted["Date"] = pivoted["Date"].astype(str)
+    pivoted["Day"] = pivoted["Day"].astype(str)
     roster_json = pivoted.fillna("").to_dict(orient="records")
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(roster_json, f, indent=2)

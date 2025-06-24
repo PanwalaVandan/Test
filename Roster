@@ -1,0 +1,37 @@
+
+import pandas as pd
+import json
+import os
+
+def convert_stakeholder_format(input_file, output_file="converted_roster.json"):
+    # Load file based on extension
+    ext = os.path.splitext(input_file)[-1].lower()
+    if ext == ".csv":
+        df = pd.read_csv(input_file)
+    elif ext in [".xls", ".xlsx"]:
+        df = pd.read_excel(input_file)
+    else:
+        raise ValueError("Unsupported file format. Use .csv, .xls, or .xlsx")
+
+    # Melt: Employee columns to rows
+    melted = df.melt(id_vars=["Date", "Day"], var_name="Employee", value_name="Shift")
+
+    # Group by Date, Day, Shift and combine employee names
+    grouped = (
+        melted.dropna()
+        .groupby(["Date", "Day", "Shift"])["Employee"]
+        .apply(lambda x: ", ".join(sorted(x)))
+        .reset_index()
+    )
+
+    # Pivot so each row is one date and columns are shifts
+    pivoted = grouped.pivot(index=["Date", "Day"], columns="Shift", values="Employee").reset_index()
+
+    # Convert to JSON and save
+    roster_json = pivoted.fillna("").to_dict(orient="records")
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(roster_json, f, indent=2)
+    print(f"✅ JSON file saved to: {output_file}")
+
+# Example usage:
+# convert_stakeholder_format("your_input_file.csv")
